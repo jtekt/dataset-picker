@@ -1,11 +1,21 @@
 <template>
   <v-app>
     <v-main>
-      <DatasetIssImport />
+      <v-container>
+        <v-card>
+          <v-card-title> Dataset picker </v-card-title>
+          <v-card-text>
+            <DatasetPicker />
+          </v-card-text>
+        </v-card>
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import DatasetIssImport from "@/components/DatasetIssImport.vue";
+// import DatasetPicker from "@/components/datasetPicker/DatasetIssImport.vue";
+
+import DatasetPicker from "dataset-picker";
+import "dataset-picker/dist/style.css";
 </script>
