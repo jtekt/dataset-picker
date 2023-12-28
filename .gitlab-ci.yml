@@ -7,6 +7,7 @@ publish:
   tags:
     - dind
   before_script:
+    - echo ${VERDACCIO_TOKEN}
     - echo "//10.115.1.100:30873/:_authToken=${VERDACCIO_TOKEN}" > ~/.npmrc
   script:
     - npm install
