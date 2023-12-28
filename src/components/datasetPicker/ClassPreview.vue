@@ -30,7 +30,7 @@ interface Image {
 const props = defineProps<{
   className: string;
   field: string;
-  issUrl: string;
+  issUrl?: string;
   queryParameters: any;
 }>();
 const images = ref<Image[]>([]);

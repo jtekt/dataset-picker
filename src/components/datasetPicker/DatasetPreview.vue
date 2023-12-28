@@ -16,38 +16,43 @@
       {{ Math.min(imageCount, queryParameters.limit) }}
     </v-col>
   </v-row>
-  <v-table fixed-header max-height="50vh" class="mt-4">
-    <thead>
-      <tr>
-        <th></th>
-        <th class="text-left">Time</th>
-        <th class="text-left" v-for="field in fields" :key="field">
-          {{ field }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="image in images" :key="image._id">
-        <td class="image-property">
-          <v-img :src="getImageSrc(image._id)" width="5rem" />
-        </td>
-        <td>{{ image.time }}</td>
-        <td
-          v-for="field in fields"
-          :key="`${image._id}_${field}`"
-          class="image-property"
-        >
-          <span class="">{{ image.data[field] }}</span>
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+  <v-row v-if="datasetLoadError" justify="center">
+    <v-col cols="auto" class="text-error"> Failed to get dataset </v-col>
+  </v-row>
+  <div v-else class="table_wrapper mt-4">
+    <v-table fixed-header>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="text-left">Time</th>
+          <th class="text-left" v-for="field in fields" :key="field">
+            {{ field }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="image in images" :key="image._id">
+          <td class="image-property">
+            <v-img :src="getImageSrc(image._id)" width="5rem" />
+          </td>
+          <td>{{ image.time }}</td>
+          <td
+            v-for="field in fields"
+            :key="`${image._id}_${field}`"
+            class="image-property"
+          >
+            <span class="">{{ image.data[field] }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </div>
 
   <!-- TODO: pagination -->
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, inject } from "vue";
+import { ref, watch, onMounted } from "vue";
 import axios from "axios";
 
 interface Image {
@@ -66,24 +71,30 @@ const loading = ref(false);
 const images = ref<Image[]>([]);
 const imageCount = ref(0);
 const fields = ref<string[]>([]);
+const datasetLoadError = ref(false);
+watch(
+  () => props.issUrl,
+  () => {
+    images.value = [];
+    imageCount.value = 0;
 
-// Does not work
-// watch(props.issUrl, () => {
-//   images.value = [];
-//   imageCount.value = 0;
-// });
+    queryDataset();
+  }
+);
 
 const queryDataset = async () => {
   if (!props.issUrl) return;
-  const url = `${props.issUrl}/images`;
 
+  datasetLoadError.value = false;
+  loading.value = true;
+
+  const url = `${props.issUrl}/images`;
   const limit = 20;
   const params = {
     ...props.queryParameters,
     limit,
   };
 
-  loading.value = true;
   try {
     const {
       data: { items, total },
@@ -94,7 +105,7 @@ const queryDataset = async () => {
     emit("dataPreviewed");
   } catch (error) {
     console.error(error);
-    alert(error);
+    datasetLoadError.value = true;
   } finally {
     loading.value = false;
   }
@@ -125,7 +136,7 @@ const getImageSrc = (_id: string) => `${props.issUrl}/images/${_id}/image`;
 </script>
 
 <style scoped>
-.table-wrapper {
+.table_wrapper {
   max-height: 50vh;
   overflow-y: auto;
 }
