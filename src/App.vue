@@ -14,8 +14,5 @@
 </template>
 
 <script setup lang="ts">
-// import DatasetPicker from "@/components/datasetPicker/DatasetIssImport.vue";
-
-import DatasetPicker from "dataset-picker";
-import "dataset-picker/dist/style.css";
+import DatasetPicker from "@/components/datasetPicker/DatasetIssImport.vue";
 </script>
