@@ -1,4 +1,6 @@
-# default
+# Dataset picker
+
+A Vue.js component to select a dataset from the Image-storage service
 
 ## Project setup
 
