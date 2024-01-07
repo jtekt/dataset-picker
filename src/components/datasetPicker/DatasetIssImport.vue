@@ -55,6 +55,7 @@
           :limit="limit"
           :fields="fields"
           v-model:field="field"
+          v-model:classNames="classNames"
         />
       </v-expansion-panel-text>
     </v-expansion-panel>
@@ -91,6 +92,7 @@ const issUrlUserInput = ref(props.defaultIssUrl);
 const issUrl = ref(props.defaultIssUrl);
 const fields = ref<string[]>([]);
 const field = ref<string>();
+const classNames = ref<string[]>([]);
 const fieldsLoading = ref(false);
 const panels = ref([0, 1, 2]);
 const dateFilters = ref<{ from: string; to: string }>({
@@ -128,9 +130,9 @@ const selectDataset = () => {
 
   const eventData = {
     queryParams,
-    classField: field.value,
     imageStorageApiUrl: issUrl.value,
-    // classes: classNames.value, // NECESSARY?
+    classField: field.value,
+    classes: classNames.value,
   };
   emit("select", eventData);
 };

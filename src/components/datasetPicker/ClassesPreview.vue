@@ -16,9 +16,9 @@
     </v-col>
   </v-row>
 
-  <v-row v-if="field && classNames.length">
+  <v-row v-if="field && classNamesInternal.length">
     <v-col>
-      <div v-for="className in classNames" :key="className">
+      <div v-for="className in classNamesInternal" :key="className">
         <ClassPreview
           :className="className"
           :field="field"
@@ -43,9 +43,11 @@ const props = defineProps<{
   limit: number;
   fields: any[];
   field?: string;
+  classNames: string[];
 }>();
-const emit = defineEmits(["update:field"]);
-const classNames = ref<string[]>([]);
+
+const emit = defineEmits(["update:field", "update:classNames"]);
+// const classNamesInternal = ref<string[]>([]);
 const classesLoading = ref(false);
 
 const fieldInternal = computed({
@@ -57,6 +59,15 @@ const fieldInternal = computed({
   },
 });
 
+const classNamesInternal = computed({
+  get() {
+    return props.classNames;
+  },
+  set(newVal) {
+    emit("update:classNames", newVal);
+  },
+});
+
 watch(fieldInternal, () => {
   getClassNames();
 });
@@ -64,12 +75,12 @@ watch(fieldInternal, () => {
 const getClassNames = async () => {
   if (!props.issUrl) return;
   // Needed to trigger mounted in previews
-  classNames.value = [];
+  classNamesInternal.value = [];
   classesLoading.value = true;
   try {
     const url = `${props.issUrl}/fields/${fieldInternal.value}`;
     const { data } = await axios.get(url);
-    classNames.value = data;
+    classNamesInternal.value = data;
   } catch (error) {
     alert(error);
   } finally {
