@@ -42,11 +42,12 @@
           :query-parameters="{ ...filters, ...dateFilters, limit }"
           :issUrl="issUrl"
           @dataPreviewed="getFields()"
+          @itemClicked="$emit('datasetPreviewItemClicked', $event)"
         />
       </v-expansion-panel-text>
     </v-expansion-panel>
 
-    <v-expansion-panel title="Classes preview" v-if="fields.length">
+    <v-expansion-panel title="Classes" v-if="fields.length">
       <v-expansion-panel-text>
         <ClassesPreview
           :filters="filters"
@@ -54,6 +55,7 @@
           :dateFilters="dateFilters"
           :limit="limit"
           :fields="fields"
+          :hideClassesPreview="hideClassesPreview"
           v-model:field="field"
           v-model:classNames="classNames"
         />
@@ -86,8 +88,12 @@ import axios from "axios";
 // or make one GET request for each class
 // Currently going for the second option
 
-const emit = defineEmits(["select"]);
-const props = defineProps<{ defaultIssUrl?: string }>();
+const props = defineProps<{
+  defaultIssUrl?: string;
+  hideClassesPreview?: boolean;
+}>();
+
+const emit = defineEmits(["select", "datasetPreviewItemClicked"]);
 const issUrlUserInput = ref(props.defaultIssUrl);
 const issUrl = ref(props.defaultIssUrl);
 const fields = ref<string[]>([]);

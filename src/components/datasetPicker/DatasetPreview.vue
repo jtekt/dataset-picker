@@ -20,6 +20,7 @@
     <v-col cols="auto" class="text-error"> Failed to get dataset </v-col>
   </v-row>
   <div v-else class="table_wrapper mt-4">
+    <!-- TODO: This could be a v-data-table -->
     <v-table fixed-header>
       <thead>
         <tr>
@@ -33,7 +34,11 @@
       <tbody>
         <tr v-for="image in images" :key="image._id">
           <td class="image-property">
-            <v-img :src="getImageSrc(image._id)" width="5rem" />
+            <v-img
+              :src="getImageSrc(image._id)"
+              width="5rem"
+              @click="emit('itemClicked', image)"
+            />
           </td>
           <td>{{ image.time }}</td>
           <td
@@ -66,7 +71,7 @@ const props = defineProps<{
   issUrl?: string;
 }>();
 
-const emit = defineEmits(["dataPreviewed"]);
+const emit = defineEmits(["dataPreviewed", "itemClicked"]);
 const loading = ref(false);
 const images = ref<Image[]>([]);
 const imageCount = ref(0);

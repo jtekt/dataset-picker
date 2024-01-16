@@ -1,2 +1,2 @@
-import DatasetPicker from "./DatasetIssImport.vue";
+import DatasetPicker from "./IssDatasetPicker.vue";
 export default DatasetPicker;

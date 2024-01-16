@@ -16,7 +16,7 @@
     </v-col>
   </v-row>
 
-  <v-row v-if="field && classNamesInternal.length">
+  <v-row v-if="field && classNamesInternal.length && !hideClassesPreview">
     <v-col>
       <div v-for="className in classNamesInternal" :key="className">
         <ClassPreview
@@ -44,6 +44,7 @@ const props = defineProps<{
   fields: any[];
   field?: string;
   classNames: string[];
+  hideClassesPreview?: boolean;
 }>();
 
 const emit = defineEmits(["update:field", "update:classNames"]);
