@@ -81,7 +81,7 @@ import QueryFilters from "./QueryFilters.vue";
 import IsoDatePicker from "./IsoDatePicker.vue";
 import DatasetPreview from "./DatasetPreview.vue";
 import ClassesPreview from "./ClassesPreview.vue";
-import { ref } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import axios from "axios";
 
 // Two options: either get all images and separate them in classes in the GUI
@@ -91,9 +91,14 @@ import axios from "axios";
 const props = defineProps<{
   defaultIssUrl?: string;
   hideClassesPreview?: boolean;
+  modelValue?: any;
 }>();
 
-const emit = defineEmits(["select", "datasetPreviewItemClicked"]);
+const emit = defineEmits([
+  "select",
+  "datasetPreviewItemClicked",
+  "update:model-value",
+]);
 const issUrlUserInput = ref(props.defaultIssUrl);
 const issUrl = ref(props.defaultIssUrl);
 const fields = ref<string[]>([]);
@@ -127,21 +132,30 @@ const getFields = async () => {
   }
 };
 
-const selectDataset = () => {
-  const queryParams = {
+const dataset = computed(() => ({
+  queryParams: {
     ...filters.value,
     ...dateFilters.value,
     limit: limit.value,
-  };
+  },
+  imageStorageApiUrl: issUrl.value,
+  classField: field.value,
+  classes: classNames.value,
+}));
 
-  const eventData = {
-    queryParams,
-    imageStorageApiUrl: issUrl.value,
-    classField: field.value,
-    classes: classNames.value,
-  };
-  emit("select", eventData);
+watch(dataset, () => {
+  emit("update:model-value", dataset.value);
+});
+
+// TODO: watch props.dataset
+
+const selectDataset = () => {
+  emit("select", dataset.value);
 };
+
+onMounted(() => {
+  emit("update:model-value", dataset.value);
+});
 </script>
 
 <style scoped>

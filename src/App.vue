@@ -12,9 +12,15 @@
                   hideClassesPreview
                   @select="handleDatasetSelection"
                   @datasetPreviewItemClicked="handleDatasetPreviewItemClicked"
+                  v-model="dataset"
                 />
               </v-card-text>
             </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            {{ dataset }}
           </v-col>
         </v-row>
       </v-container>
@@ -24,6 +30,10 @@
 
 <script setup lang="ts">
 import DatasetPicker from "@/components/datasetPicker/IssDatasetPicker.vue";
+import { ref } from "vue";
+
+const dataset = ref({});
+
 const { VITE_IMAGE_STORAGE_URL } = import.meta.env;
 function handleDatasetSelection(queryparameters: any) {
   alert(JSON.stringify(queryparameters));
@@ -31,5 +41,9 @@ function handleDatasetSelection(queryparameters: any) {
 
 function handleDatasetPreviewItemClicked(image: any) {
   alert(JSON.stringify(image));
+}
+
+function handleDatasetUpdate(ds: any) {
+  dataset.value = ds;
 }
 </script>
