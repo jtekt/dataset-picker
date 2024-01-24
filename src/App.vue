@@ -10,7 +10,6 @@
                 <DatasetPicker
                   :defaultIssUrl="VITE_IMAGE_STORAGE_URL"
                   hideClassesPreview
-                  @select="handleDatasetSelection"
                   @datasetPreviewItemClicked="handleDatasetPreviewItemClicked"
                   v-model="dataset"
                 />
@@ -35,15 +34,8 @@ import { ref } from "vue";
 const dataset = ref({});
 
 const { VITE_IMAGE_STORAGE_URL } = import.meta.env;
-function handleDatasetSelection(queryparameters: any) {
-  alert(JSON.stringify(queryparameters));
-}
 
 function handleDatasetPreviewItemClicked(image: any) {
   alert(JSON.stringify(image));
-}
-
-function handleDatasetUpdate(ds: any) {
-  dataset.value = ds;
 }
 </script>

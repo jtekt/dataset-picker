@@ -62,18 +62,6 @@
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
-
-  <v-row v-if="field" justify="center" class="mt-4">
-    <v-col cols="auto">
-      <v-btn
-        color="primary"
-        prepend-icon="mdi-download"
-        @click="selectDataset()"
-      >
-        select dataset
-      </v-btn>
-    </v-col>
-  </v-row>
 </template>
 
 <script lang="ts" setup>
@@ -94,11 +82,7 @@ const props = defineProps<{
   modelValue?: any;
 }>();
 
-const emit = defineEmits([
-  "select",
-  "datasetPreviewItemClicked",
-  "update:model-value",
-]);
+const emit = defineEmits(["datasetPreviewItemClicked", "update:model-value"]);
 const issUrlUserInput = ref(props.defaultIssUrl);
 const issUrl = ref(props.defaultIssUrl);
 const fields = ref<string[]>([]);
@@ -148,10 +132,6 @@ watch(dataset, () => {
 });
 
 // TODO: watch props.dataset
-
-const selectDataset = () => {
-  emit("select", dataset.value);
-};
 
 onMounted(() => {
   emit("update:model-value", dataset.value);
