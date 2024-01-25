@@ -16,7 +16,14 @@
     </v-col>
   </v-row>
 
-  <v-row v-if="field && classNamesInternal.length && !hideClassesPreview">
+  <v-row
+    v-if="
+      field &&
+      classNamesInternal?.length &&
+      !hideClassesPreview &&
+      !someClassesAreNotString
+    "
+  >
     <v-col>
       <div v-for="className in classNamesInternal" :key="className">
         <ClassPreview
@@ -28,13 +35,17 @@
       </div>
     </v-col>
   </v-row>
+  <v-row v-if="someClassesAreNotString" justify="center">
+    <v-col cols="auto" class="text-error text-h5">
+      Classes are not of type string
+    </v-col>
+  </v-row>
 </template>
 
 <script setup lang="ts">
 import ClassPreview from "./ClassPreview.vue";
 import { ref, computed, watch } from "vue";
 import axios from "axios";
-import {} from "vue";
 
 const props = defineProps<{
   filters: any;
@@ -43,12 +54,12 @@ const props = defineProps<{
   limit: number;
   fields: any[];
   field?: string;
-  classNames: string[];
+  classNames?: string[];
   hideClassesPreview?: boolean;
 }>();
 
 const emit = defineEmits(["update:field", "update:classNames"]);
-// const classNamesInternal = ref<string[]>([]);
+
 const classesLoading = ref(false);
 
 const fieldInternal = computed({
@@ -62,6 +73,7 @@ const fieldInternal = computed({
 
 const classNamesInternal = computed({
   get() {
+    console.log(props.classNames);
     return props.classNames;
   },
   set(newVal) {
@@ -88,4 +100,8 @@ const getClassNames = async () => {
     classesLoading.value = false;
   }
 };
+
+const someClassesAreNotString = computed(() =>
+  classNamesInternal.value?.some((n) => typeof n !== "string")
+);
 </script>

@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 
-const props = defineProps<{ label: string; modelValue: string }>();
+const props = defineProps<{ label?: string; modelValue: string | undefined }>();
 const emit = defineEmits(["update:modelValue"]);
 
 const date = computed({

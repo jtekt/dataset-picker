@@ -77,6 +77,8 @@ const images = ref<Image[]>([]);
 const imageCount = ref(0);
 const fields = ref<string[]>([]);
 const datasetLoadError = ref(false);
+const queriedIssUrl = ref<string>();
+
 watch(
   () => props.issUrl,
   () => {
@@ -89,6 +91,7 @@ watch(
 
 const queryDataset = async () => {
   if (!props.issUrl) return;
+  queriedIssUrl.value = props.issUrl;
 
   datasetLoadError.value = false;
   loading.value = true;
@@ -128,7 +131,8 @@ onMounted(() => {
   queryDataset();
 });
 
-const getImageSrc = (_id: string) => `${props.issUrl}/images/${_id}/image`;
+const getImageSrc = (_id: string) =>
+  `${queriedIssUrl.value}/images/${_id}/image`;
 
 // const datasetGuiUrl = computed(() => {
 //   const url = new URL(`${VITE_IMAGE_STORAGE_GUI_URL}/images/`);

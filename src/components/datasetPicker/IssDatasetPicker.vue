@@ -76,26 +76,32 @@ import axios from "axios";
 // or make one GET request for each class
 // Currently going for the second option
 
+type Dataset = {
+  imageStorageApiUrl?: string;
+  classField?: string;
+  classes?: any[];
+  queryParams?: any;
+};
+
 const props = defineProps<{
-  defaultIssUrl?: string;
   hideClassesPreview?: boolean;
-  modelValue?: any;
+  modelValue?: Dataset;
 }>();
 
 const emit = defineEmits(["datasetPreviewItemClicked", "update:model-value"]);
-const issUrlUserInput = ref(props.defaultIssUrl);
-const issUrl = ref(props.defaultIssUrl);
+const issUrlUserInput = ref(props.modelValue?.imageStorageApiUrl);
+const issUrl = ref(props.modelValue?.imageStorageApiUrl);
 const fields = ref<string[]>([]);
-const field = ref<string>();
-const classNames = ref<string[]>([]);
+const field = ref<string | undefined>(props.modelValue?.classField);
+const classNames = ref<any[] | undefined>([]);
 const fieldsLoading = ref(false);
 const panels = ref([0, 1, 2]);
 const dateFilters = ref<{ from: string; to: string }>({
-  from: "",
-  to: "",
+  from: props.modelValue?.queryParams?.from,
+  to: props.modelValue?.queryParams?.to,
 });
 const filters = ref<any>({});
-const limit = ref(100);
+const limit = ref(props.modelValue?.queryParams?.limit || 100);
 
 const selectIss = () => {
   issUrl.value = issUrlUserInput.value;
@@ -131,7 +137,23 @@ watch(dataset, () => {
   emit("update:model-value", dataset.value);
 });
 
-// TODO: watch props.dataset
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    field.value = newVal?.classField;
+    classNames.value = newVal?.classes;
+    issUrlUserInput.value = newVal?.imageStorageApiUrl;
+
+    const { from, to, limit: propsLimit, ...propsFilter } = newVal?.queryParams;
+    dateFilters.value.from = from;
+    dateFilters.value.to = to;
+    limit.value = propsLimit;
+
+    if (JSON.stringify(propsFilter) !== JSON.stringify(filters.value))
+      filters.value = propsFilter;
+  },
+  { deep: true }
+);
 
 onMounted(() => {
   emit("update:model-value", dataset.value);
