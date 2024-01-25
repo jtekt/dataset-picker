@@ -1,6 +1,6 @@
 # Dataset picker
 
-A Vue.js component to select a dataset from the Image storage microservice.
+A Vue.js component to select a dataset from the JTEKT [Image storage microservice](https://github.com/jtekt/image-storage-microservice).
 
 ## Usage example
 
@@ -25,7 +25,9 @@ const dataset = ref({
 </script>
 ```
 
-## Project setup
+## Development
+
+### Project setup
 
 ```
 npm install
