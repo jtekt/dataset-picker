@@ -2,6 +2,29 @@
 
 A Vue.js component to select a dataset from the Image storage microservice.
 
+## Usage example
+
+```vue
+<template>
+  <v-app>
+    <DatasetPicker v-model="dataset" />
+  </v-app>
+</template>
+
+<script setup lang="ts">
+import DatasetPicker from "@jtekt/dataset-picker"
+import { ref } from "vue"
+
+const { VITE_IMAGE_STORAGE_URL } = import.meta.env
+const dataset = ref({
+  imageStorageApiUrl: VITE_IMAGE_STORAGE_URL,
+  queryParams: {
+    limit: 123,
+  },
+})
+</script>
+```
+
 ## Project setup
 
 ```
