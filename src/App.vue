@@ -21,6 +21,7 @@
               <v-card-title> Dataset picker </v-card-title>
               <v-card-text>
                 <DatasetPicker
+                  :hideClassesPreview="true"
                   @datasetPreviewItemClicked="handleDatasetPreviewItemClicked"
                   v-model="dataset"
                 />

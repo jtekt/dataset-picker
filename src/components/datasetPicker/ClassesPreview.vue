@@ -16,30 +16,27 @@
     </v-col>
   </v-row>
 
-  <v-row
-    v-if="
-      field &&
-      classNamesInternal?.length &&
-      !hideClassesPreview &&
-      !someClassesAreNotString
-    "
-  >
-    <v-col>
-      <div v-for="className in classNamesInternal" :key="className">
-        <ClassPreview
-          :className="className"
-          :field="field"
-          :query-parameters="{ ...filters, ...dateFilters, limit }"
-          :issUrl="issUrl"
-        />
-      </div>
-    </v-col>
-  </v-row>
-  <v-row v-if="someClassesAreNotString" justify="center">
-    <v-col cols="auto" class="text-error text-h5">
-      Classes are not of type string
-    </v-col>
-  </v-row>
+  <template v-if="!hideClassesPreview">
+    <v-row
+      v-if="field && classNamesInternal?.length && !someClassesAreNotString"
+    >
+      <v-col>
+        <div v-for="className in classNamesInternal" :key="className">
+          <ClassPreview
+            :className="className"
+            :field="field"
+            :query-parameters="{ ...filters, ...dateFilters, limit }"
+            :issUrl="issUrl"
+          />
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-if="someClassesAreNotString" justify="center">
+      <v-col cols="auto" class="text-error text-h5">
+        Classes are not of type string
+      </v-col>
+    </v-row>
+  </template>
 </template>
 
 <script setup lang="ts">
