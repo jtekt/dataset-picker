@@ -1,8 +1,5 @@
 <template>
   <v-row>
-    <v-col>
-      <v-select :items="fields" v-model="fieldInternal" label="Class field" />
-    </v-col>
     <v-col cols="auto">
       <v-btn
         class="mt-2"
@@ -13,6 +10,9 @@
       >
         Get classes
       </v-btn>
+    </v-col>
+    <v-col>
+      <v-select :items="fields" v-model="fieldInternal" label="Class field" />
     </v-col>
   </v-row>
 
